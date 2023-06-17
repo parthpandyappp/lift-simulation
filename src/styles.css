@@ -16,7 +16,7 @@ main {
   width: 100%;
   align-items: center;
   justify-content: center;
-  background-color: aqua;
+  background-color: #f1f5f9;
   overflow-y: scroll;
 }
 
@@ -25,6 +25,9 @@ main {
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  background-color: #e2e8f0;
+  padding: 2rem;
+  border-radius: 0.3rem;
 }
 
 .floors {
@@ -35,16 +38,19 @@ main {
 
 .floors .floor {
   display: flex;
-  align-items: end;
+  align-items: center;
   height: 5rem;
   gap: 1rem;
+  border-bottom: 1px solid #a1a1aa;
 }
 
 .lift {
   order: 10;
   width: 4rem;
   height: 5rem;
-  background-color: red;
+  background-color: #1e293b;
+  border-top-right-radius: 0.2rem;
+  border-top-left-radius: 0.2rem;
 }
 
 .no-lift {
@@ -54,4 +60,23 @@ main {
 
 .up-button {
   order: 9;
+}
+
+input {
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  font-size: large;
+  background-color: none;
+  border: 1px solid black;
+  outline: none;
+}
+
+#generateFloors {
+  padding: 0.5rem 2rem;
+  font-weight: bold;
+  background-color: #1e293b;
+  border: none;
+  color: #ffffff;
+  border-radius: 0.2rem;
+  cursor: pointer;
 }
