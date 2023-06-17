@@ -60,6 +60,7 @@ main {
 
 .up-button {
   order: 9;
+  width: 3rem;
 }
 
 input {

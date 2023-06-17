@@ -32,8 +32,12 @@ const createFloor = (floorNumber) => {
         })
         floor.appendChild(upButton)
     }
-    else{
-        
+    else {
+        let upButton = document.createElement("button")
+        upButton.innerText = "up"
+        upButton.className = "up-button"
+        upButton.style.visibility = "hidden"
+        floor.appendChild(upButton)
     }
 
     if (floorNumber !== 0) {
@@ -44,6 +48,13 @@ const createFloor = (floorNumber) => {
             moveLift(floorNumber)
             renderFloors()
         })
+        floor.appendChild(downButton)
+    }
+    else {
+        let downButton = document.createElement("button")
+        downButton.innerText = "down"
+        downButton.className = "down-button"
+        downButton.style.visibility = "hidden"
         floor.appendChild(downButton)
     }
 
