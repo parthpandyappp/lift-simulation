@@ -1,10 +1,10 @@
-let noOfFloors = document.querySelector("#no-of-floors")
-let noOfLifts = document.querySelector("#no-of-lifts")
-let formInput = document.querySelector(".form")
-let floorGeneration = document.querySelector("#generateFloors")
 let lift = document.querySelector(".lift")
-
+let formInput = document.querySelector(".form")
+let noOfLifts = document.querySelector("#no-of-lifts")
 let floorContainer = document.querySelector(".floors")
+let noOfFloors = document.querySelector("#no-of-floors")
+let floorGeneration = document.querySelector("#generateFloors")
+
 let liftPos = []
 
 
@@ -15,9 +15,9 @@ const createFloor = (floorNumber) => {
     floor.className = "floor"
     floor.innerHTML = `
         <p>${floorNumber}</p>
-        ${liftPos.map((pos) => {
-        if (pos === floorNumber) {
-            return `<p class="lift"></p>`
+        ${liftPos.map((pos, index) => {
+        if (pos.pos === floorNumber) {
+            return `<p class="lift lift-${index}"></p>`
         }
         return `<p class="no-lift"></p>`
     }).join('')}`
@@ -28,7 +28,6 @@ const createFloor = (floorNumber) => {
         upButton.className = "up-button"
         upButton.addEventListener("click", () => {
             moveLift(floorNumber)
-            renderFloors()
         })
         floor.appendChild(upButton)
     }
@@ -46,7 +45,6 @@ const createFloor = (floorNumber) => {
         downButton.className = "up-button"
         downButton.addEventListener("click", () => {
             moveLift(floorNumber)
-            renderFloors()
         })
         floor.appendChild(downButton)
     }
@@ -64,12 +62,12 @@ const createFloor = (floorNumber) => {
 const moveLift = (floorNumber) => {
     let flag = false
     for (let i = 0; i < liftPos.length; i++) {
-        if (liftPos[i] === floorNumber) {
+        if (liftPos[i].pos === floorNumber) {
             flag = true
         }
     }
     if (flag === true) {
-        return liftPos;
+        return liftPos
     }
     else {
         const res = {}
@@ -78,35 +76,47 @@ const moveLift = (floorNumber) => {
                 res[i] = Math.abs(i - floorNumber)
             }
         }
+
         const index = getPresentLiftPos(Number(getKeyWithMinimumValue(res)))
-        liftPos[index] = floorNumber
+        liftPos[index].pos = floorNumber
+        liftPos[index].busy = true
+        let liftInstance = document.querySelector(`.lift-${index}`)
+        liftInstance.style.transform = `translateY(-${6 * (Math.abs(floorNumber))}rem)`;
+        liftInstance.style.transition = `all ${floorNumber !== 0 ? 2 * (Math.abs(floorNumber)) : 2}s`;
+
+        setTimeout(() => {
+            liftPos[index].busy = false
+        }, 2000 * (Math.abs(floorNumber - index)))
         return liftPos;
     }
 }
 
 const isLiftPresent = (floorNumber) => {
-    return liftPos.some((pos) => pos === floorNumber)
+    return liftPos.filter(({ busy }) => busy === false).some((pos) => pos.pos === floorNumber)
 }
 
 const getPresentLiftPos = (floorNumber) => {
-    return liftPos.findIndex((pos) => pos === floorNumber)
+    return liftPos.findIndex((pos) => {
+        return pos.pos === floorNumber
+    })
 }
 
 const getKeyWithMinimumValue = (obj) => {
     let firstKey = Object.keys(obj)[0]
     let minValue = obj[firstKey];
-    let minKey = firstKey;
+    let minKey;
 
     if (Object.keys(obj).length === 1) {
         return firstKey;
     }
 
     for (let key in obj) {
-        if (obj[key] < minValue) {
+        if (obj[key] <= minValue) {
             minValue = obj[key];
             minKey = key;
         }
     };
+
     return minKey;
 }
 
@@ -132,7 +142,7 @@ const renderFloors = () => {
 
 
 floorGeneration.addEventListener("click", () => {
-    liftPos = new Array(Number(noOfLifts.value)).fill(0)
+    liftPos = Array.from({ length: Number(noOfLifts.value) }, () => ({ pos: 0, busy: false }))
     if (noOfLifts.value > noOfFloors.value) {
         alert("No of lifts can't exceed no of floors")
     }

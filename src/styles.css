@@ -51,6 +51,12 @@ main {
   background-color: #1e293b;
   border-top-right-radius: 0.2rem;
   border-top-left-radius: 0.2rem;
+  transition: transform 2.5s ease-in-out;
+}
+
+.move {
+  transition: transform 2.5s ease-in-out;
+  transform: translateY(-6rem);
 }
 
 .no-lift {
