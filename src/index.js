@@ -86,7 +86,7 @@ const moveLift = (floorNumber) => {
 
         setTimeout(() => {
             liftPos[index].busy = false
-        }, 2000 * (Math.abs(floorNumber - index)))
+        }, 2000 * (Math.abs(floorNumber)))
         return liftPos;
     }
 }
@@ -142,11 +142,21 @@ const renderFloors = () => {
 
 
 floorGeneration.addEventListener("click", () => {
+    let flag = true
     liftPos = Array.from({ length: Number(noOfLifts.value) }, () => ({ pos: 0, busy: false }))
-    if (noOfLifts.value > noOfFloors.value) {
-        alert("No of lifts can't exceed no of floors")
+    if (noOfLifts.value < 0) {
+        flag = false
+        alert("Number of lifts can't underflow")
     }
-    else {
+    if (noOfFloors.value < 0) {
+        flag = false
+        alert("Number of floors can't underflow")
+    }
+    if (noOfLifts.value > noOfFloors.value) {
+        flag = false
+        alert("Number of lifts can't exceed Number of floors")
+    }
+    if (flag) {
         formInput.style.display = "none"
         floorContainer.style.display = "flex"
         renderFloors();
