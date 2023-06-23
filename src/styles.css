@@ -48,10 +48,40 @@ main {
   order: 10;
   width: 4rem;
   height: 5rem;
-  background-color: #1e293b;
+  background-color: gray;
   border-top-right-radius: 0.2rem;
   border-top-left-radius: 0.2rem;
   transition: transform 2.5s ease-in-out;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.door {
+  position: absolute;
+  height: 5rem;
+  width: 1.9rem;
+  transition: all 2.5s ease-in-out;
+}
+
+.left-door {
+  background-color: #1e293b;
+  top: 0;
+  left: 0;
+}
+
+.right-door {
+  background-color: #1e293b;
+  top: 0;
+  right: 0;
+}
+
+.left-move {
+  transform: translateX(-100%);
+}
+.right-move {
+  transform: translateX(100%);
 }
 
 .move {

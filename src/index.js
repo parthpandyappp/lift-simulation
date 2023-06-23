@@ -17,7 +17,7 @@ const createFloor = (floorNumber) => {
         <p>${floorNumber}</p>
         ${liftPos.map((pos, index) => {
         if (pos.pos === floorNumber) {
-            return `<p class="lift lift-${index}"></p>`
+            return `<span class="lift lift-${index}"><section class="door left-door"></section><section class="door right-door"></section></span>`
         }
         return `<p class="no-lift"></p>`
     }).join('')}`
@@ -61,12 +61,16 @@ const createFloor = (floorNumber) => {
 
 const moveLift = (floorNumber) => {
     let flag = false
+    let pos = 0;
     for (let i = 0; i < liftPos.length; i++) {
         if (liftPos[i].pos === floorNumber) {
+            pos = i
             flag = true
         }
     }
     if (flag === true) {
+        let liftInstance = document.querySelector(`.lift-${pos}`)
+        openAndCloseDoors(liftInstance, pos)
         return liftPos
     }
     else {
@@ -83,12 +87,24 @@ const moveLift = (floorNumber) => {
         let liftInstance = document.querySelector(`.lift-${index}`)
         liftInstance.style.transform = `translateY(-${6 * (Math.abs(floorNumber))}rem)`;
         liftInstance.style.transition = `all ${floorNumber !== 0 ? 2 * (Math.abs(floorNumber)) : 2}s`;
-
         setTimeout(() => {
-            liftPos[index].busy = false
+            openAndCloseDoors(liftInstance, index);
+
         }, 2000 * (Math.abs(floorNumber)))
         return liftPos;
     }
+}
+
+const openAndCloseDoors = (liftInstance, index) => {
+    const leftDoor = liftInstance.querySelector(".left-door");
+    const rightDoor = liftInstance.querySelector(".right-door");
+    leftDoor.classList.add("left-move");
+    rightDoor.classList.add("right-move");
+    setTimeout(() => {
+        leftDoor.classList.remove("left-move");
+        rightDoor.classList.remove("right-move")
+        liftPos[index].busy = false
+    }, 2000)
 }
 
 const isLiftPresent = (floorNumber) => {
