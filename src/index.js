@@ -14,7 +14,7 @@ const createFloor = (floorNumber) => {
 
     floor.className = "floor"
     floor.innerHTML = `
-        <p>${floorNumber}</p>
+        <p class="floor-number">${floorNumber}</p>
         ${liftPos.map((pos, index) => {
         if (pos.pos === floorNumber) {
             return `<span class="lift lift-${index}"><section class="door left-door"></section><section class="door right-door"></section></span>`
@@ -22,40 +22,40 @@ const createFloor = (floorNumber) => {
         return `<p class="no-lift"></p>`
     }).join('')}`
 
+    let buttonsContainer = document.createElement("div")
+    buttonsContainer.style.display = "flex"
+    buttonsContainer.style.flexDirection = "column"
+    buttonsContainer.style.gap = "0.5rem"
+
+
     if (floorNumber !== noOfFloors.value - 1) {
-        let upButton = document.createElement("button")
-        upButton.innerText = "up"
+        let upButton = document.createElement("div")
+        upButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11.25l-3-3m0 0l-3 3m3-3v7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      `
         upButton.className = "up-button"
         upButton.addEventListener("click", () => {
             moveLift(floorNumber)
         })
-        floor.appendChild(upButton)
-    }
-    else {
-        let upButton = document.createElement("button")
-        upButton.innerText = "up"
-        upButton.className = "up-button"
-        upButton.style.visibility = "hidden"
-        floor.appendChild(upButton)
+        buttonsContainer.appendChild(upButton)
     }
 
+
+
     if (floorNumber !== 0) {
-        let downButton = document.createElement("button")
-        downButton.innerText = "down"
+        let downButton = document.createElement("div")
+        downButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      `
         downButton.className = "up-button"
         downButton.addEventListener("click", () => {
             moveLift(floorNumber)
         })
-        floor.appendChild(downButton)
+        buttonsContainer.appendChild(downButton)
     }
-    else {
-        let downButton = document.createElement("button")
-        downButton.innerText = "down"
-        downButton.className = "down-button"
-        downButton.style.visibility = "hidden"
-        floor.appendChild(downButton)
-    }
-
+    floor.appendChild(buttonsContainer)
     return floor
 }
 
@@ -70,6 +70,7 @@ const moveLift = (floorNumber) => {
     }
     if (flag === true) {
         let liftInstance = document.querySelector(`.lift-${pos}`)
+        liftPos[pos].busy = true
         openAndCloseDoors(liftInstance, pos)
         return liftPos
     }
@@ -89,7 +90,6 @@ const moveLift = (floorNumber) => {
         liftInstance.style.transition = `all ${floorNumber !== 0 ? 2 * (Math.abs(floorNumber)) : 2}s`;
         setTimeout(() => {
             openAndCloseDoors(liftInstance, index);
-
         }, 2000 * (Math.abs(floorNumber)))
         return liftPos;
     }
@@ -145,7 +145,11 @@ const renderFloors = () => {
     }
 
     let backBtn = document.createElement("button")
-    backBtn.innerText = "BACK"
+    backBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="back-icon">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M21 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953l7.108-4.062A1.125 1.125 0 0121 8.688v8.123zM11.25 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953L9.567 7.71a1.125 1.125 0 011.683.977v8.123z" />
+  </svg> Back
+  `
+    backBtn.className = "back-btn"
     backBtn.addEventListener("click", () => {
         formInput.style.display = "flex"
         floorContainer.style.display = "none"
