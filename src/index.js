@@ -81,16 +81,16 @@ const moveLift = (floorNumber) => {
                 res[i] = Math.abs(i - floorNumber)
             }
         }
-
         const index = getPresentLiftPos(Number(getKeyWithMinimumValue(res)))
+        const prevPos = liftPos[index].pos
         liftPos[index].pos = floorNumber
         liftPos[index].busy = true
         let liftInstance = document.querySelector(`.lift-${index}`)
         liftInstance.style.transform = `translateY(-${6 * (Math.abs(floorNumber))}rem)`;
-        liftInstance.style.transition = `all ${floorNumber !== 0 ? 2 * (Math.abs(floorNumber)) : 2}s`;
+        liftInstance.style.transition = `all ${2 * (Math.abs(floorNumber - prevPos))}s`;
         setTimeout(() => {
             openAndCloseDoors(liftInstance, index);
-        }, 2000 * (Math.abs(floorNumber)))
+        }, 2000 * (Math.abs(floorNumber - prevPos)))
         return liftPos;
     }
 }
@@ -103,7 +103,7 @@ const openAndCloseDoors = (liftInstance, index) => {
     setTimeout(() => {
         leftDoor.classList.remove("left-move");
         rightDoor.classList.remove("right-move")
-        liftPos[index].busy = false
+        setTimeout(() => { liftPos[index].busy = false }, 2500)
     }, 2000)
 }
 
