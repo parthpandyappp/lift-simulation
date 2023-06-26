@@ -6,7 +6,7 @@ let noOfFloors = document.querySelector("#no-of-floors")
 let floorGeneration = document.querySelector("#generateFloors")
 
 let liftPos = []
-
+let pendingCalls = []
 
 const createFloor = (floorNumber) => {
     let floor = document.createElement("div")
@@ -36,7 +36,12 @@ const createFloor = (floorNumber) => {
       `
         upButton.className = "up-button"
         upButton.addEventListener("click", () => {
-            moveLift(floorNumber)
+            if (liftPos.every((pos) => pos.busy === true)) {
+                pendingCalls.push(floorNumber)
+            }
+            else {
+                moveLift(floorNumber)
+            }
         })
         buttonsContainer.appendChild(upButton)
     }
@@ -51,7 +56,12 @@ const createFloor = (floorNumber) => {
       `
         downButton.className = "up-button"
         downButton.addEventListener("click", () => {
-            moveLift(floorNumber)
+            if (liftPos.every((pos) => pos.busy === true)) {
+                pendingCalls.push(floorNumber)
+            }
+            else {
+                moveLift(floorNumber)
+            }
         })
         buttonsContainer.appendChild(downButton)
     }
@@ -103,7 +113,14 @@ const openAndCloseDoors = (liftInstance, index) => {
     setTimeout(() => {
         leftDoor.classList.remove("left-move");
         rightDoor.classList.remove("right-move")
-        setTimeout(() => { liftPos[index].busy = false }, 2500)
+        setTimeout(() => {
+            liftPos[index].busy = false
+            if (pendingCalls.length > 0) {
+                const floorIdFromRemainingCalls = pendingCalls[0];
+                pendingCalls.shift();
+                moveLift(floorIdFromRemainingCalls, liftInstance);
+            }
+        }, 2500)
     }, 2000)
 }
 
@@ -164,17 +181,21 @@ const renderFloors = () => {
 floorGeneration.addEventListener("click", () => {
     let flag = true
     liftPos = Array.from({ length: Number(noOfLifts.value) }, () => ({ pos: 0, busy: false }))
-    if (noOfLifts.value < 0) {
+    if (Number(noOfFloors.value) < 0) {
         flag = false
-        alert("Number of lifts can't underflow")
+        alert("Number of floors can't be less than 2")
     }
-    if (noOfFloors.value < 0) {
+    if (Number(noOfLifts.value) < 1) {
         flag = false
-        alert("Number of floors can't underflow")
+        alert("Number of lifts can't be less than 1")
     }
-    if (noOfLifts.value > noOfFloors.value) {
+    if (Number(noOfLifts.value) > Number(noOfFloors.value)) {
         flag = false
         alert("Number of lifts can't exceed Number of floors")
+    }
+    if (Number(noOfLifts.value) > 10) {
+        flag = false
+        alert("Number of lifts can't be more than 10")
     }
     if (flag) {
         formInput.style.display = "none"
