@@ -11,18 +11,25 @@
     <main>
       <div class="form">
         <h1>Lift Simulation</h1>
-        <input
-          name="noOfFloors"
-          id="no-of-floors"
-          type="number"
-          placeholder="Number of floors"
-        />
-        <input
-          name="noOfLifts"
-          id="no-of-lifts"
-          type="number"
-          placeholder="Number of Lifts"
-        />
+        <div class="form-field">
+          <label for="noOfFloors">Number of Floors</label>
+          <input
+            name="noOfFloors"
+            id="no-of-floors"
+            type="number"
+            placeholder="Number of floors"
+          />
+        </div>
+        <div class="form-field">
+          <label for="noOfFloors">Number of Lifts</label>
+          <input
+            name="noOfLifts"
+            id="no-of-lifts"
+            type="number"
+            placeholder="Number of Lifts"
+          />
+        </div>
+
         <button id="generateFloors">SUBMIT</button>
       </div>
       <div class="floors"></div>

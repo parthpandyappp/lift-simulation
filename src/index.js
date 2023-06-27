@@ -5,6 +5,8 @@ let floorContainer = document.querySelector(".floors")
 let noOfFloors = document.querySelector("#no-of-floors")
 let floorGeneration = document.querySelector("#generateFloors")
 
+floorContainer.style.display = "none"
+
 let liftPos = []
 let pendingCalls = []
 
